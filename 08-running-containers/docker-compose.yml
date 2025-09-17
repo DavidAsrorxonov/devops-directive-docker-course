@@ -1,3 +1,4 @@
+version: "3.9"
 services:
   client-react-vite:
     image: client-react-vite
@@ -12,13 +13,10 @@ services:
     ports:
       - 5173:5173
   client-react-nginx:
-    labels:
-      shipyard.primary-route: true
-      shipyard.route: '/'
     image: client-react-nginx
     build:
       context: ../05-example-web-application/client-react/
-      dockerfile: ../../06-building-container-images/client-react/Dockerfile.5
+      dockerfile: ../../05-example-web-application/client-react/Dockerfile
     init: true
     networks:
       - frontend
@@ -26,13 +24,10 @@ services:
       - 80:8080
     restart: unless-stopped
   api-node:
-    labels:
-      shipyard.route: '/api/node/'
-      shipyard.route.rewrite: true
     image: api-node
     build:
       context: ../05-example-web-application/api-node/
-      dockerfile: ../../06-building-container-images/api-node/Dockerfile.7
+      dockerfile: ../../05-example-web-application/api-node/Dockerfile
     init: true
     depends_on:
       - db
@@ -44,25 +39,6 @@ services:
     ports:
       - 3000:3000
     restart: unless-stopped
-  api-golang:
-    labels:
-      shipyard.route: '/api/golang/'
-      shipyard.route.rewrite: true
-    image: api-golang
-    build:
-      context: ../05-example-web-application/api-golang/
-      dockerfile: ../../06-building-container-images/api-golang/Dockerfile.6
-    init: true
-    depends_on:
-      - db
-    environment:
-      - DATABASE_URL=postgres://postgres:foobarbaz@db:5432/postgres
-    networks:
-      - frontend
-      - backend
-    ports:
-      - 8080:8080
-    restart: unless-stopped
   db:
     image: postgres:15.1-alpine
     volumes:
@@ -72,7 +48,7 @@ services:
     networks:
       - backend
     ports:
-      - 5432:5432
+      - 5433:5432
 volumes:
   pgdata:
 networks:

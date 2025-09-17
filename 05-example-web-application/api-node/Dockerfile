@@ -1,8 +1,8 @@
-FROM node:19.6-alpine
-
-WORKDIR /usr/src/app
+FROM node:19.6-bullseye-slim
 
 ENV NODE_ENV=production
+
+WORKDIR /usr/src/app
 
 COPY package*.json ./
 
